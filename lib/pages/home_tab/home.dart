@@ -36,6 +36,12 @@ class _HomeNaviBarState extends State<HomeNaviBar>
   }
 
   @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var searchButton = SizedBox(
       width: 120,

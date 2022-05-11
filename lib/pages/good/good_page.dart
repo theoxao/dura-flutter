@@ -30,6 +30,12 @@ class _GoodPageState extends State<GoodPage> {
   }
 
   @override
+  void dispose() {
+    _goodDetailBloc.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream: _goodDetailBloc.stream,

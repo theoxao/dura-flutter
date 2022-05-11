@@ -29,6 +29,13 @@ class _SearchPageState extends State<SearchPage> {
   final _searchBloc = SearchBloc();
 
   @override
+  void dispose() {
+    _searchBloc.close();
+    _searchTextController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     _searchBloc.bindContext(context);
     SharedPreferences.getInstance().then((sp) {

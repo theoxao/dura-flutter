@@ -45,6 +45,12 @@ dependencies:
   cached_network_image: 3.2.0
   image_network: ^2.5.0
   loading: ^1.0.2
+  flutter_fast_forms: ^6.0.0
+  enhance_stepper: ^0.1.1
+  flutter_keyboard_visibility: ^5.2.0
+  image_picker: ^0.8.5
+  ktx: ^1.1.6
+
 
 dev_dependencies:
   flutter_test:
@@ -67,7 +73,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  assets:
+    - image/ic_add_cover.png
+    - image/add-image.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

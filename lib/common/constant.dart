@@ -11,6 +11,7 @@ const headTextStyle = TextStyle(
 
 
 const host = "https://api.theoxao.com/dura/";
+// const host = "http://localhost:8989/";
 
 
 double get windowWidth => window.physicalSize.width;
@@ -70,6 +71,11 @@ BaseOptions getOption(String path) {
 
 const  defaultOutlineBorder =  OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(25)),
-    borderSide:
-    BorderSide(width: 1, style: BorderStyle.solid),
+    borderSide: BorderSide(width: 1, style: BorderStyle.solid),
   );
+
+
+outlineBorder (double radius) =>OutlineInputBorder(
+borderRadius: BorderRadius.all(Radius.circular(radius)),
+borderSide: const BorderSide(width: 1, style: BorderStyle.solid),
+);

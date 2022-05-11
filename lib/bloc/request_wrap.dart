@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:duraemon_flutter/common/extensions.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,7 @@ class RequestWrap {
       Response response = await Dio(options).get(options.baseUrl);
       return response;
     } on DioError catch (e) {
+      log(e.toString());
       return Response(data: [], requestOptions: options.toRequestOption());;
     }
   }
@@ -21,6 +24,7 @@ class RequestWrap {
       Response response = await Dio(options).post(options.baseUrl, data: data);
       return response;
     } on DioError catch (e) {
+      log(e.toString());
       return Response(data: [], requestOptions: options.toRequestOption());
     }
   }

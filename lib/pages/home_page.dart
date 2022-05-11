@@ -1,4 +1,5 @@
 
+import 'package:duraemon_flutter/pages/good/good_add_page.dart';
 import 'package:duraemon_flutter/pages/home_tab/home.dart';
 import 'package:duraemon_flutter/pages/home_tab/me.dart';
 import 'package:fancy_bar/fancy_bar.dart';
@@ -56,7 +57,9 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){},
+        onPressed: (){
+          Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const GoodAddPage()));
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
