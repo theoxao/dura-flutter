@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:dio/dio.dart';
+import 'package:duraemon_flutter/common/extensions.dart';
 import 'package:flutter/material.dart';
 
 const headTextStyle = TextStyle(

@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:duraemon_flutter/bloc/good_bloc.dart';
+import 'package:duraemon_flutter/common/constant.dart';
 import 'package:duraemon_flutter/common/extensions.dart';
+import 'package:duraemon_flutter/model/Item_detail.dart';
 import 'package:duraemon_flutter/model/good_base_info.dart';
 import 'package:duraemon_flutter/model/good_suggestion.dart';
 import 'package:duraemon_flutter/model/request_model.dart';
@@ -21,10 +23,20 @@ class GoodAddPage extends StatefulWidget {
 class _GoodAddPageState extends State<GoodAddPage> {
   final _nameEditCtl = TextEditingController();
   final _descEditCtl = TextEditingController();
+
+  final detailFieldList = [
+    "name" , "desc" , "pd" , "qty", "best_favor", "storage" , "storage_used", "cost"
+  ];
+
+  final Map<String, TextEditingController> detailCtlMap = {};
+  final Map<String, FocusNode> detailFnMap = {};
+
   final _descFocusNode = FocusNode();
   final _suggestionBloc = GoodSuggestionBloc();
   ValueNotifier<NewGoodRequest> addGoodRequest =
       ValueNotifier(NewGoodRequest());
+  ValueNotifier<ItemDetail> itemDetail = ValueNotifier(ItemDetail());
+
   ValueNotifier<int> currentStep = ValueNotifier(0);
   final defaultTitle = "add good";
   late String appBarTitle;
@@ -32,6 +44,7 @@ class _GoodAddPageState extends State<GoodAddPage> {
 
   @override
   void initState() {
+    super.initState();
     addGoodRequest =  ValueNotifier(NewGoodRequest());
     _suggestionBloc.bindContext(context);
     _nameEditCtl.addListener(() {
@@ -70,7 +83,16 @@ class _GoodAddPageState extends State<GoodAddPage> {
       });
     });
     appBarTitle = defaultTitle;
-    super.initState();
+    for (var field in detailFieldList) {
+      var ctl  =TextEditingController();
+      ctl.addListener(() {
+        var value = ItemDetail.fromJson(itemDetail.value.toJson());
+        value.desc = ctl.text;
+        itemDetail.value = value;
+      });
+      detailCtlMap[field] =ctl ;
+      detailFnMap[field] = FocusNode();
+    }
   }
 
   bool checkNextEnable() {
@@ -87,6 +109,42 @@ class _GoodAddPageState extends State<GoodAddPage> {
 
   @override
   Widget build(BuildContext context) {
+    var step1 = EnhanceStep(
+      title: const Text("good"),
+      content: Column(
+        children: [
+          SearchChoiceWidget(
+            popupListItemBuilder: (GoodSuggestion item) {
+              return SizedBox(
+                  height: 60,
+                  child: Row(
+                    children: [
+                      Center(
+                          child: Text(item.name ?? "undefined").pa(8)),
+                      if (item.goodId != null)
+                        const Icon(Icons.explore_rounded)
+                    ],
+                  ));
+            },
+            textEditingController: _nameEditCtl,
+            onItemSelected: (GoodSuggestion item) {
+              _nameEditCtl.text = item.name ?? "undefined";
+              if(item.goodId!=null){
+                addGoodRequest.value.id = item.goodId;
+              }
+              //jump to next step
+              currentStep.value = item.goodId == null ? 1 : 2;
+            },
+            futureData: (String text) =>
+                GoodRepository(context).suggestion(text),
+            onAddTapped: () {
+              currentStep.value = 1;
+            },
+          )
+        ],
+      ),
+    );
+
     var step2 = EnhanceStep(
       title: const Text("category"),
       content: Column(
@@ -141,10 +199,20 @@ class _GoodAddPageState extends State<GoodAddPage> {
 
     var step3 = EnhanceStep(
       title: const Text("detail"),
-      content: Container(
-        child: Text("sp3"),
+      content:Material(
+        child: Column(
+          children: [
+            detailTF("name"),
+            detailTF("desc"),
+            detailTF("qty", type: TextInputType.number),
+            detailTF("storage"),
+            detailTF("storage_used"),
+            detailTF("cost", type: const TextInputType.numberWithOptions(decimal: true))
+          ],
+        ),
       ),
     );
+
 
     return Scaffold(
         appBar: AppBar(
@@ -178,44 +246,41 @@ class _GoodAddPageState extends State<GoodAddPage> {
           currentStep: currentStep.value,
           type: StepperType.horizontal,
           steps: [
-            EnhanceStep(
-              title: const Text("good"),
-              content: Column(
-                children: [
-                  SearchChoiceWidget(
-                    popupListItemBuilder: (GoodSuggestion item) {
-                      return SizedBox(
-                          height: 60,
-                          child: Row(
-                            children: [
-                              Center(
-                                  child: Text(item.name ?? "undefined").pa(8)),
-                              if (item.goodId != null)
-                                const Icon(Icons.explore_rounded)
-                            ],
-                          ));
-                    },
-                    textEditingController: _nameEditCtl,
-                    onItemSelected: (GoodSuggestion item) {
-                      _nameEditCtl.text = item.name ?? "undefined";
-                      if(item.goodId!=null){
-                        addGoodRequest.value.id = item.goodId;
-                      }
-                      //jump to next step
-                      currentStep.value = item.goodId == null ? 1 : 2;
-                    },
-                    futureData: (String text) =>
-                        GoodRepository(context).suggestion(text),
-                    onAddTapped: () {
-                      currentStep.value = 1;
-                    },
-                  )
-                ],
-              ),
-            ),
+            step1,
             step2,
             step3
           ],
         ));
   }
+
+  Widget detailTF(String key , {TextInputType type = TextInputType.text}){
+    return TextField(
+      controller: detailCtlMap[key],
+      focusNode: detailFnMap[key],
+      style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+      keyboardType: type,
+      decoration: InputDecoration(
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0x4437474F),
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+        // suffixIcon: const Icon(Icons.search),
+        border: InputBorder.none,
+        hintText: key,
+        contentPadding: const EdgeInsets.only(
+          left: 16,
+          right: 20,
+          top: 14,
+          bottom: 14,
+        ),
+      ),
+    ).pa(8);
+  }
+
 }

@@ -20,6 +20,7 @@ class CategorySelector extends StatefulWidget {
 class _CategorySelectorState extends State<CategorySelector> {
   final _categoryListBloc = CategoryListBloc();
   final _categoryEditCtl = TextEditingController();
+  final _categoryFocusNode= FocusNode();
 
   List<Category> selectedCategories = [];
 
@@ -38,6 +39,7 @@ class _CategorySelectorState extends State<CategorySelector> {
             (BuildContext context, AsyncSnapshot<List<Category>> snapshot) {
           return TextField(
             controller: _categoryEditCtl,
+            focusNode: _categoryFocusNode,
             onTap: () {
               if (snapshot.hasData && snapshot.data != null) {
                 var list = snapshot.data!;
@@ -48,6 +50,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                 showCategorySelectDialog(context, category).then((cate){
                   _categoryEditCtl.text = selectedCategories.sublist(1,selectedCategories.length).map((it) =>it.name ).join(">")+">"+(cate?.name??"");
                   widget.onSelected(cate);
+                  _categoryFocusNode.unfocus();
                 });
               }
             },

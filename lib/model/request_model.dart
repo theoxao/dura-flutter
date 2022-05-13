@@ -26,6 +26,3 @@ class NewGoodRequest{
   }
 }
 
-class NewDetailRequest{
-
-}
