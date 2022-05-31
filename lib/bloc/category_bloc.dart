@@ -21,10 +21,8 @@ class CategoryRepository extends BaseRepository {
 
   Future<List<Category>> categories() async{
     String path = host + "/category";
-    var option = getOption(path);
-    var response = await request.get(option);
-    log("request:${response.requestOptions.path}");
-    log("response: ${response.data.toString()}");
+    var response = await request.get(path);
+    debugPrint("response: ${response.data.toString()}");
     List<Category> list = [];
     if(response.data['status'] == 200){
       for (var tag in response.data['data']) {

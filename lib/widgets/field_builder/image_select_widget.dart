@@ -5,14 +5,16 @@ import 'package:duraemon_flutter/bloc/image_repository.dart';
 import 'package:duraemon_flutter/common/constant.dart';
 import 'package:duraemon_flutter/common/extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ktx/standard.dart';
 import 'package:ktx/collections.dart';
 
 class ImageSelector extends StatefulWidget {
   final void Function(List<String> list) selectedImage;
+  final InputFieldBloc<List<String>, Object>? inputFieldBloc;
 
-  const ImageSelector({Key? key, required this.selectedImage}) : super(key: key);
+  const ImageSelector({Key? key, required this.selectedImage,  this.inputFieldBloc}) : super(key: key);
 
   @override
   State<ImageSelector> createState() => _ImageSelectorState();
@@ -28,6 +30,7 @@ class _ImageSelectorState extends State<ImageSelector> {
   void initState() {
     paths.addListener(() {
       widget.selectedImage(paths.value);
+      widget.inputFieldBloc?.updateValue(paths.value);
     });
     _imageRepository = ImageRepository(context);
     super.initState();
@@ -142,7 +145,7 @@ class _ImageSelectorState extends State<ImageSelector> {
         }
       });
     } on Exception catch (_, e) {
-      log("select image cancelled: ${e.toString()}");
+      debugPrint("select image cancelled: ${e.toString()}");
     }
   }
 }

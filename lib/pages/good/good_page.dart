@@ -45,7 +45,6 @@ class _GoodPageState extends State<GoodPage> {
             if (info == null) {
               return Center(child: Loading(size: 100.0));
             }
-
             return Scaffold(
               appBar: AppBar(
                 title: Text(

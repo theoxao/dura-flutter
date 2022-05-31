@@ -52,16 +52,14 @@ class SearchRepository extends BaseRepository {
 
   Future<List<SearchResult>> search(String keyword, int type, int offset) async {
     String path = host + "search";
-    var option = getOption(path);
-    option.queryParameters={
+    var queryParameters={
       "keyword": keyword,
       "type": type,
       "offset":offset,
     };
-    var response = await request.get(option);
-    log("request:${response.requestOptions.path}");
-    log("param:  ${option.queryParameters.toString()}");
-    log("response: ${response.data.toString()}");
+    var response = await request.get(path, queryParameters: queryParameters);
+    debugPrint("param:  ${queryParameters.toString()}");
+    debugPrint("response: ${response.data.toString()}");
     List<SearchResult> list = [];
     if(response.data['status'] == 200){
       for (var tag in response.data['data']) {
@@ -69,7 +67,7 @@ class SearchRepository extends BaseRepository {
       }
       return list;
     }
-    log("request@${response.requestOptions.path} error");
+    debugPrint("request@${response.requestOptions.path} error");
     return [];
   }
 }

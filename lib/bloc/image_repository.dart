@@ -12,14 +12,12 @@ class ImageRepository extends BaseRepository {
 
   Future<String> upload(String name , Uint8List bytes) async{
     String path = host + "image/upload";
-    var option = getOption(path);
     FormData body = FormData();
     final MultipartFile file = MultipartFile.fromBytes(bytes, filename: name);
     MapEntry<String, MultipartFile> imageEntry = MapEntry("image", file);
     body.files.add(imageEntry);
-    var response = await request.post(option , data: body);
-    log("request:${response.requestOptions.path}");
-    log("response: ${response.data.toString()}");
+    var response = await request.post(path , data: body);
+    debugPrint("response: ${response.data.toString()}");
     return response.data['data'];
   }
 }

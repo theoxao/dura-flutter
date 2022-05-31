@@ -196,7 +196,7 @@ class MySingleChoiceSearchState<T> extends State<SearchChoiceWidget<T>> {
   }
 
   void onDropDownItemTap(T item) {
-    log("item tapped");
+    debugPrint("item tapped");
     if (overlayEntry != null) {
       overlayEntry?.remove();
     }

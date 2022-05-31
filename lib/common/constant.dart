@@ -57,7 +57,6 @@ int maxHistory = 10;
 
 BaseOptions get getOptions {
   Map<String, dynamic> headers = {};
-  headers['token'] = "70843bc3-794a-4d99-a05a-c4e6487036bd";
   var _options = BaseOptions(headers: headers);
   return _options;
 }
@@ -65,7 +64,6 @@ BaseOptions get getOptions {
 BaseOptions getOption(String path) {
   var options = getOptions;
   options.baseUrl = path;
-  log("requesting at $path");
   return options;
 }
 
@@ -80,3 +78,22 @@ outlineBorder (double radius) =>OutlineInputBorder(
 borderRadius: BorderRadius.all(Radius.circular(radius)),
 borderSide: const BorderSide(width: 1, style: BorderStyle.solid),
 );
+
+
+InputDecoration defaultDecoration(String key) {
+  return   InputDecoration(
+    enabledBorder: const OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Color(0x4437474F),
+      ),
+    ),
+    border: InputBorder.none,
+    hintText: key,
+    contentPadding: const EdgeInsets.only(
+      left: 16,
+      right: 20,
+      top: 14,
+      bottom: 14,
+    ),
+  );
+}

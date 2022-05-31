@@ -1,6 +1,7 @@
 import 'package:duraemon_flutter/pages/good/good_add_page.dart';
 import 'package:duraemon_flutter/pages/good/good_page.dart';
 import 'package:duraemon_flutter/pages/home_page.dart';
+import 'package:duraemon_flutter/pages/printer/printer_connect_page.dart';
 import 'package:duraemon_flutter/pages/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
